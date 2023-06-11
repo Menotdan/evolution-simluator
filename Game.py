@@ -10,6 +10,10 @@ from math_utils import normalize_vector, clamp, get_distance
 from Agents.Creatures.Creature import Creature
 
 class Game:
+    # init state (type, factor)
+    creatures_spawn = [(Creature, 1)]
+    food_spawn = [(Food, 1)]
+
     # state
     foods: list[Food] = []
     creatures: list[Creature] = []
@@ -186,12 +190,12 @@ class Game:
     def __init__(self, foods_count, creatures_start):
         self.init_renderer()
 
-        for i in range(creatures_start):
-            creature_init = Creature()
-            creature_init.x = self.generate_x()
-            creature_init.y = self.generate_y()
-            creature_init.energy = creature_init.weight * self.energy_max_by_weight_scale
-            self.creatures.append(creature_init)
+        for creature_type, percent in self.creatures_spawn:
+            for i in range(int(math.floor(creatures_start * percent))):
+                creature_init = creature_type()
+                creature_init.x = self.generate_x()
+                creature_init.y = self.generate_y()
+                self.creatures.append(creature_init)
 
         self.init_food(foods_count)
 
