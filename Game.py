@@ -109,12 +109,12 @@ class Game:
     
     def init_food(self, food_count):
         self.foods.clear()
-        for i in range(food_count):
-            new_food: Food = Food()
-            new_food.x = self.generate_x()
-            new_food.y = self.generate_y()
-            new_food.energy = float(randint(self.food_energy_min, self.food_energy_max))
-            self.foods.append(new_food)
+        for food_type, percent in self.food_spawn:
+            for i in range(int(math.floor(food_count * percent))):
+                new_food = food_type()
+                new_food.x = self.generate_x()
+                new_food.y = self.generate_y()
+                self.foods.append(new_food)
 
     def draw_objects(self):
         self.render_display.fill((255, 255, 255))
