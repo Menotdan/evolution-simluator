@@ -173,3 +173,20 @@ class Creature:
     
     def apply_move_energy_cost(self, distance):
         self.energy -= ((self.weight / math.pow(7, self.weight_power_factor/self.weight)) * distance * self.movement_energy_tuning)
+
+    def copy(self):
+        return_object = Creature()
+        return_object.weight = self.weight
+        return_object.speed = self.speed
+        return_object.eyesight = self.eyesight
+
+        return_object.move_attack_weight = self.move_attack_weight
+        return_object.move_food_weight = self.move_food_weight
+        return_object.move_escape_weight = self.move_escape_weight
+
+        return_object.energy = self.weight * 5
+
+        return return_object
+    
+    def __init__(self):
+        self.energy = self.weight * 5

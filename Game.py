@@ -33,8 +33,6 @@ class Game:
     GREEN = (0, 200, 0)
     RED =  (200, 0, 0)
 
-    energy_max_by_weight_scale = 5
-
     def encounter_handle(self, c1: Creature, c2: Creature):
         c1_would_win = c1.would_win(c2)
         c2_would_win = c2.would_win(c1)
@@ -127,13 +125,12 @@ class Game:
         pygame.display.update()
 
     def create_child(self, creature: Creature):
-        new_creature = Creature()
+        new_creature = creature.copy()
         new_creature.x = self.generate_x()
         new_creature.y = self.generate_y()
-        
+
         # scale evolution values
         new_creature.evolve()
-        new_creature.energy = new_creature.weight * self.energy_max_by_weight_scale
 
         self.creatures.append(new_creature)
     
