@@ -92,9 +92,9 @@ class Game:
 
     def day_end(self, food_count):
         for c in self.creatures[:]:
-            if c.energy >= c.weight:
-                for i in range(min(2, math.floor(c.energy / (c.weight * self.reproduction_factor)))):
-                    self.create_child(c)
+            for i in range(int(c.child_count())):
+                self.create_child(c)
+
         self.init_food(food_count)
     
     def init_food(self, food_count):

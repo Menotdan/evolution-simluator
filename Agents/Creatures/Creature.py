@@ -125,6 +125,9 @@ class Creature:
         if self.energy <= 0:
             self.alive = False
     
+    def child_count(self):
+        return math.floor(max(0, min(3, self.energy / self.weight / 4.5)))
+    
     def wander_behaviour(self):
         move_direction = np.asarray([(random() - 0.5) * 2, (random() - 0.5) * 2])
         move_direction = normalize_vector(move_direction)
