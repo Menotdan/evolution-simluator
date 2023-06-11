@@ -151,6 +151,12 @@ class Creature:
             return False
         return True
 
+    def lost_fight(self, fighter):
+        self.alive = False
+
+    def won_fight(self, fighter):
+        self.energy += fighter.energy / 2
+
     def collides(self, object):
         if get_distance(self, object) <= self.object_collision_box_edge:
             return True

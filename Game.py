@@ -35,6 +35,26 @@ class Game:
 
     energy_max_by_weight_scale = 5
 
+    def encounter_handle(self, c1: Creature, c2: Creature):
+        c1_would_win = c1.would_win(c2)
+        c2_would_win = c2.would_win(c1)
+        real_c1_wins = True
+
+        if c1_would_win != c2_would_win:
+            if c1.energy > c2.energy:
+                real_c1_wins = c1_would_win
+            else:
+                real_c1_wins = c2_would_win
+        else:
+            real_c1_wins = c1_would_win # both are correct, just pick one
+
+        if real_c1_wins:
+            c1.won_fight(c2)
+            c2.lost_fight(c1)
+        else:
+            c1.lost_fight(c2)
+            c2.won_fight(c1)
+
     def time_step(self):
         for c in self.creatures:
             c.run_ai(self.creatures, self.foods)
@@ -55,16 +75,8 @@ class Game:
                     continue
                 if c == sub_c:
                     continue
-                
                 if c.collides(sub_c):
-                    if c.would_win(sub_c):
-                        sub_c.alive = False
-                        c.energy += sub_c.energy * self.kill_energy_factor
-                        continue
-                    else:
-                        c.alive = False
-                        sub_c.energy += c.energy * self.kill_energy_factor
-                        break
+                    self.encounter_handle(c, sub_c)
 
         # Cleanup dead creatures
         copy_creatures = self.creatures[:]
