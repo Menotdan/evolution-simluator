@@ -123,7 +123,7 @@ class Game:
     def draw_objects(self):
         self.render_display.fill((255, 255, 255))
         for c in self.creatures:
-            pygame.draw.circle(self.render_display, self.RED, (c.x * self.render_scale, c.y * self.render_scale), c.object_collision_box_edge * 4 * self.render_scale)
+            c.draw_object(self.render_display, self.render_scale)
         for f in self.foods:
             pygame.draw.circle(self.render_display, self.GREEN, (f.x * self.render_scale, f.y * self.render_scale), Creature.object_collision_box_edge * 4 * self.render_scale)
         pygame.display.update()
