@@ -5,14 +5,18 @@ from pygame.locals import *
 import numpy as np
 from random import random, randint
 
-from Agents.Food.Food import Food
 from math_utils import normalize_vector, clamp, get_distance
+
+from Agents.Food.Food import Food
+from Agents.Food.Food_Default import Food_Default
+
 from Agents.Creatures.Creature import Creature
+from Agents.Creatures.Creature_Default import Creature_Default
 
 class Game:
     # init state (type, factor)
-    creatures_spawn = [(Creature, 1)]
-    food_spawn = [(Food, 1)]
+    creatures_spawn = [(Creature_Default, 1)]
+    food_spawn = [(Food_Default, 1)]
 
     # state
     foods: list[Food] = []
@@ -125,7 +129,7 @@ class Game:
         for c in self.creatures:
             c.draw_object(self.render_display, self.render_scale)
         for f in self.foods:
-            pygame.draw.circle(self.render_display, self.GREEN, (f.x * self.render_scale, f.y * self.render_scale), Creature.object_collision_box_edge * 4 * self.render_scale)
+            f.draw_object(self.render_display, self.render_scale)
         pygame.display.update()
 
     def create_child(self, creature: Creature):

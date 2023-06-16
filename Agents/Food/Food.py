@@ -1,4 +1,7 @@
 from random import randint
+import pygame
+
+GREEN = (0, 200, 0)
 
 class Food:
     # state
@@ -11,5 +14,11 @@ class Food:
     energy_min = 25
     energy_max = 40
 
+    def draw_object(self, display_surface, render_scale):
+        pass
+
+    def eaten(self, eaten_by):
+        pass
+
     def __init__(self):
-        self.energy = float(randint(self.energy_min, self.energy_max))
+        pass
