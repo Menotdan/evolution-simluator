@@ -70,6 +70,7 @@ class Game:
 
             for f in self.foods:
                 if c.collides(f) and f.alive:
+                    f.eaten(c)
                     f.alive = False
                     c.energy += f.energy
             
