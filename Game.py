@@ -183,8 +183,14 @@ class Game:
                 self.time_steps = 0
                 self.day_end(foods_count)
                 if len(self.creatures) > 0:
-                    index = randint(0, len(self.creatures) - 1)
-                    print(f"Creatures: {len(self.creatures)}, {round(self.creatures[index].move_escape_weight, 3)}, {round(self.creatures[index].move_attack_weight, 3)}, {round(self.creatures[index].move_food_weight, 3)}")
+                    index = -1
+                    highest_energy = 0
+                    for c in range(len(self.creatures)):
+                        if self.creatures[c].energy > highest_energy:
+                            index = c
+                            highest_energy = self.creatures[c].energy
+
+                    print(f"Creatures: {len(self.creatures)} | Best Creature; Move Weights (E, A, F): {round(self.creatures[index].move_escape_weight, 3)}, {round(self.creatures[index].move_attack_weight, 3)}, {round(self.creatures[index].move_food_weight, 3)}, Weight: {round(self.creatures[index].weight, 3)}, Speed: {round(self.creatures[index].speed, 3)}")
                 self.draw_objects()
             last_run = time.time() - start_run
 
