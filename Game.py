@@ -38,9 +38,6 @@ class Game:
 
     render_scale = 2
 
-    GREEN = (0, 200, 0)
-    RED =  (200, 0, 0)
-
     def encounter_handle(self, c1: Creature, c2: Creature):
         c1_would_win = c1.would_win(c2)
         c2_would_win = c2.would_win(c1)
