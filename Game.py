@@ -91,6 +91,7 @@ class Game:
                 deleted_count += 1
         del copy_creatures
 
+        # Cleanup eaten food
         copy_food = self.foods[:]
         deleted_count = 0
         for food_index in range(len(copy_food)):
