@@ -72,7 +72,7 @@ class Game:
                     f.eaten(c)
                     f.alive = False
                     c.energy += f.energy
-            
+
             for sub_c in self.creatures:
                 if not sub_c.alive:
                     continue
@@ -102,7 +102,7 @@ class Game:
 
     def generate_x(self):
         return float(randint(0, self.map_width - 1))
-    
+
     def generate_y(self):
         return float(randint(0, self.map_height - 1))
 
@@ -112,7 +112,7 @@ class Game:
                 self.create_child(c)
 
         self.init_food(food_count)
-    
+
     def init_food(self, food_count):
         self.foods.clear()
         for food_type, percent in self.food_spawn:
@@ -139,7 +139,7 @@ class Game:
         new_creature.evolve()
 
         self.creatures.append(new_creature)
-    
+
     def clamp_movement(self, c: Creature, limit_x, limit_y):
         c_old_pos = Creature()
         c_old_pos.x, c_old_pos.y = (c.x, c.y)
@@ -149,7 +149,7 @@ class Game:
 
         if c.y >= limit_y:
             c.y = limit_y - 1
-        
+
         if c.x < 0:
             c.x = 0
 
