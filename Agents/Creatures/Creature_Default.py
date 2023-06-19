@@ -154,7 +154,7 @@ class Creature_Default(Creature):
         self.alive = False
 
     def won_fight(self, fighter):
-        self.energy += fighter.energy / 2
+        self.energy += fighter.energy / 1.3
 
     def collides(self, object):
         if get_distance(self, object) <= self.object_collision_box_edge:
