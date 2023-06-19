@@ -25,7 +25,7 @@ class Game:
     render_display = None
 
     # constants
-    kill_energy_factor = 0.5
+    kill_energy_factor = 0.8
     food_energy_min = 25
     food_energy_max = 40
 
