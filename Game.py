@@ -192,7 +192,7 @@ class Game:
                             index = c
                             highest_energy = self.creatures[c].energy
 
-                    print(f"Creatures: {len(self.creatures)} | Best Creature; Move Weights (E, A, F): {round(self.creatures[index].move_escape_weight, 3)}, {round(self.creatures[index].move_attack_weight, 3)}, {round(self.creatures[index].move_food_weight, 3)}, Weight: {round(self.creatures[index].weight, 3)}, Speed: {round(self.creatures[index].speed, 3)}")
+                    print(f"Creatures: {len(self.creatures)} | Best Creature; Move Weights (E, A, F): {round(self.creatures[index].move_escape_weight, 3)}, {round(self.creatures[index].move_attack_weight, 3)}, {round(self.creatures[index].move_food_weight, 3)}, Weight: {round(self.creatures[index].weight, 3)}, Speed: {round(self.creatures[index].speed, 3)}, Eyesight: {round(self.creatures[index].eyesight, 3)}")
                 self.draw_objects()
             last_run = time.time() - start_run
 
