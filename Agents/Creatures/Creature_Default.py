@@ -4,6 +4,7 @@ from math_utils import normalize_vector, clamp, get_distance, get_new_value, get
 import numpy as np
 from random import *
 import math
+import json
 import pygame
 
 MOVE_FOOD = 0
@@ -188,6 +189,47 @@ class Creature_Default(Creature):
     
     def draw_object(self, display_surface, render_scale):
         pygame.draw.circle(display_surface, RED, (self.x * render_scale, self.y * render_scale), self.object_collision_box_edge * 4 * render_scale)
+    
+    # Serialization
+    def write_array(self):
+        return [
+            self.weight,
+            self.eyesight,
+            self.speed,
+            self.energy,
+            self.move_food_weight,
+            self.move_attack_weight,
+            self.move_escape_weight,
+        ]
+
+    def save_to_string(self):
+        return json.dumps(self.write_array())
+    
+    def save_avg_to_string(avg):
+        return json.dumps(avg)
+
+    def load_from_string(self, string):
+        object_input = json.loads(string)
+        self.weight = object_input[0]
+        self.eyesight = object_input[1]
+        self.speed = object_input[2]
+        self.energy = object_input[3]
+        self.move_food_weight = object_input[4]
+        self.move_attack_weight = object_input[5]
+        self.move_escape_weight = object_input[6]
+
+    def average_add(self, input_data):
+        array_input = self.write_array()
+        for n in range(len(input_data)): # All are numbers.
+            array_input[n] += input_data[n]
+        
+        return array_input
+    
+    def average_divide(input_data, count):
+        output = input_data[:]
+        for n in range(len(output)): # All are numbers.
+            output[n] = output[n] / count
+        return output
 
     def __init__(self):
         super().__init__()
