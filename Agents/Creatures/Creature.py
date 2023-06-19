@@ -48,6 +48,19 @@ class Creature:
     
     def draw_object(self, display_surface, render_scale):
         pass
+
+    # Serialization
+    def save_to_string(self):
+        return ""
+
+    def load_from_string(self, string):
+        pass
+
+    def average_add(self, input_data):
+        return input_data
+    
+    def average_divide(input_data, count):
+        return input_data
     
     def __init__(self):
         self.energy = 0
