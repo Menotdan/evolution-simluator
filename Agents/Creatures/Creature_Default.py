@@ -131,10 +131,13 @@ class Creature_Default(Creature):
         self.energy -= ((self.eyesight / 40) * self.eyesight_energy_tuning)
         if self.energy <= 0:
             self.alive = False
-    
+
     def child_count(self):
-        return math.floor(max(0, min(randint(1, 2), self.energy / self.weight / 15)))
-    
+        count = math.floor(max(0, min(1, self.energy / self.weight / 25)))
+        if count != 0:
+            self.energy -= self.weight * 15
+        return count
+
     def wander_behaviour(self):
         move_direction = np.asarray([(random() - 0.5) * 2, (random() - 0.5) * 2])
         move_direction = normalize_vector(move_direction)
