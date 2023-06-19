@@ -49,6 +49,9 @@ class Creature_Default(Creature):
     def run_ai(self, creatures, food):
         if self.alive == False:
             return
+        
+        if self.energy > self.weight * 28:
+            self.energy = self.weight * 28
 
         creatures_copy: list[Creature] = creatures[:]
         visible_creatures: list[Creature] = []
