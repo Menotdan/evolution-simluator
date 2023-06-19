@@ -50,7 +50,7 @@ class Creature_Default(Creature):
     def run_ai(self, creatures, food):
         if self.alive == False:
             return
-        
+
         if self.energy > self.weight * 28:
             self.energy = self.weight * 28
 
@@ -90,12 +90,12 @@ class Creature_Default(Creature):
                 if d < closest_escape_distance:
                     closest_escape = c
                     closest_escape_distance = d
-        
+
         for f, d in visible_food:
             if d < closest_food_distance:
                 closest_food = f
                 closest_food_distance = d
-        
+
         food_weight, escape_weight, attack_weight = (-1, -1, -1)
 
         if closest_food != None:
@@ -112,7 +112,7 @@ class Creature_Default(Creature):
             chosen_action = MOVE_ESCAPE
         elif attack_weight > food_weight and attack_weight > escape_weight:
             chosen_action = MOVE_ATTACK
-        
+
         move_direction = None
         if chosen_action == MOVE_WANDER:
             move_direction = self.wander_behaviour()
@@ -144,7 +144,7 @@ class Creature_Default(Creature):
         move_direction = normalize_vector(move_direction)
 
         return move_direction * self.speed
-    
+
     def would_win(self, fighter):
         if fighter.energy > self.energy:
             return False
@@ -160,7 +160,7 @@ class Creature_Default(Creature):
         if get_distance(self, object) <= self.object_collision_box_edge:
             return True
         return False
-    
+
     def evolve(self):
         self.weight = max(get_new_value(self.weight, self.weight_change_scale), self.weight_min)
         self.speed = max(get_new_value(self.speed, self.speed_change_scale), self.speed_min)
@@ -169,7 +169,7 @@ class Creature_Default(Creature):
         self.move_attack_weight = max(get_new_value(self.move_attack_weight, self.move_weights_change_scale), self.action_weight_min)
         self.move_food_weight = max(get_new_value(self.move_food_weight, self.move_weights_change_scale), self.action_weight_min)
         self.move_escape_weight = max(get_new_value(self.move_escape_weight, self.move_weights_change_scale), self.action_weight_min)
-    
+
     def apply_move_energy_cost(self, distance):
         self.energy -= ((self.weight / math.pow(7, self.weight_power_factor/self.weight)) * distance * self.movement_energy_tuning)
 
@@ -186,10 +186,10 @@ class Creature_Default(Creature):
         return_object.energy = self.weight * 5
 
         return return_object
-    
+
     def draw_object(self, display_surface, render_scale):
         pygame.draw.circle(display_surface, RED, (self.x * render_scale, self.y * render_scale), self.object_collision_box_edge * 4 * render_scale)
-    
+
     # Serialization
     def write_array(self):
         return [
@@ -204,7 +204,7 @@ class Creature_Default(Creature):
 
     def save_to_string(self):
         return json.dumps(self.write_array())
-    
+
     def save_avg_to_string(avg):
         return json.dumps(avg)
 
@@ -222,9 +222,9 @@ class Creature_Default(Creature):
         array_input = self.write_array()
         for n in range(len(input_data)): # All are numbers.
             array_input[n] += input_data[n]
-        
+
         return array_input
-    
+
     def average_divide(input_data, count):
         output = input_data[:]
         for n in range(len(output)): # All are numbers.
