@@ -21,7 +21,7 @@ class Creature:
 
     def child_count(self):
         return 0
-    
+
     def would_win(self, fighter):
         return False
 
@@ -33,7 +33,7 @@ class Creature:
 
     def collides(self, object):
         return False
-    
+
     def evolve(self):
         pass
 
@@ -45,7 +45,7 @@ class Creature:
         return_object.energy = self.weight * 5
 
         return return_object
-    
+
     def draw_object(self, display_surface, render_scale):
         pass
 
@@ -58,9 +58,9 @@ class Creature:
 
     def average_add(self, input_data):
         return input_data
-    
+
     def average_divide(input_data, count):
         return input_data
-    
+
     def __init__(self):
         self.energy = 0
