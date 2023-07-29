@@ -159,9 +159,11 @@ class Game:
         del c_old_pos
         return distance_clamped
 
-    def init_renderer(self):
+    def init_window(self):
         pygame.init()
         self.render_display = pygame.display.set_mode((self.map_width * self.render_scale, self.map_height * self.render_scale))
+        pygame.display.set_caption("Evolution Simulator")
+        
 
     def run_sim(self, foods_count):
         last_run = 0
@@ -196,7 +198,7 @@ class Game:
             last_run = time.time() - start_run
 
     def __init__(self, foods_count, creatures_start):
-        self.init_renderer()
+        self.init_window()
 
         for creature_type, percent in self.creatures_spawn:
             for i in range(int(math.floor(creatures_start * percent))):
