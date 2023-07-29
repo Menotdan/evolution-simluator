@@ -190,6 +190,11 @@ class Creature_Default(Creature):
     def draw_object(self, display_surface, render_scale):
         pygame.draw.circle(display_surface, RED, (self.x * render_scale, self.y * render_scale), self.object_collision_box_edge * 4 * render_scale)
 
+
+    ###
+    ### Functions related to logging the creature's stats.
+    ###
+
     # Serialization
     def write_array(self):
         return [
@@ -218,17 +223,19 @@ class Creature_Default(Creature):
         self.move_attack_weight = object_input[5]
         self.move_escape_weight = object_input[6]
 
-    def average_add(self, input_data):
+    def average_add(self, datapoints):
+        # Write our creature to an array, and then add all the numbers from the datapoints to our values, returning the result.
         array_input = self.write_array()
-        for n in range(len(input_data)): # All are numbers.
-            array_input[n] += input_data[n]
+        for n in range(len(datapoints)): # All are numbers.
+            array_input[n] += datapoints[n]
 
         return array_input
 
-    def average_divide(input_data, count):
-        output = input_data[:]
+    def average_divide(datapoints, count):
+        output = datapoints[:]
         for n in range(len(output)): # All are numbers.
             output[n] = output[n] / count
+
         return output
 
     def __init__(self):
