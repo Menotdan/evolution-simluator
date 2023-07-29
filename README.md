@@ -11,3 +11,12 @@ This is a simple and expandable evolution simulator for experimenting with thing
 * Game.py controls the rest of how the game runs. This also includes the split of types of food and creatures.
 
 See [the docs](DOCS.md) for other development information.
+
+---
+### Screenshots
+
+
+
+---
+#### Attributions:
+[Application icon by Freepik](https://www.freepik.com/icon/evolution_5930602)
