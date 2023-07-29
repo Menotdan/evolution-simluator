@@ -171,7 +171,7 @@ class Game:
         for c in self.creatures:
             found_group = False
             for g in creature_groups:
-                if type(c) == type[g[0]]:
+                if type(c) == type(g[0]):
                     g.append(c)
                     found_group = True
             
@@ -179,10 +179,28 @@ class Game:
                 creature_groups.append([c]) # Create a new creature group.
         
         return creature_groups
+    
+    def get_creatures_avg(self, creatures):
+        outputs = []
+        for creature_group in creatures:
+            output = creature_group[0].write_array()
+            for i, c in enumerate(creature_group):
+                if i == 0:
+                    continue # Skip first one since we already created it.
+                output = c.average_add(output)
+            
+            output = type(creature_group[0]).average_divide(output, len(creature_group))
+
+            outputs.append(output)
+        
+        return outputs
+        
 
     def on_quit(self):
         creatures = self.group_creatures_on_exit()
-        print(creatures)
+        averages = self.get_creatures_avg(creatures)
+        print(averages)
+        
 
     def run_sim(self, foods_count):
         last_run = 0
