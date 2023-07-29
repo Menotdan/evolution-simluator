@@ -14,7 +14,7 @@ See [the docs](DOCS.md) for other development information.
 
 ---
 ### Screenshots
-
+![A demo of the evolution simulator.](image/evolution_simulator.png "A demo of the evolution simulator.")
 
 
 ---
