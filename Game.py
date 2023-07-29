@@ -162,8 +162,9 @@ class Game:
     def init_window(self):
         pygame.init()
         self.render_display = pygame.display.set_mode((self.map_width * self.render_scale, self.map_height * self.render_scale))
+        window_icon = pygame.image.load("image/evolution.png")
+        pygame.display.set_icon(window_icon)
         pygame.display.set_caption("Evolution Simulator")
-        
 
     def run_sim(self, foods_count):
         last_run = 0
