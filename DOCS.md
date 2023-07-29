@@ -1,7 +1,7 @@
 # Documentation
 
 ## Folder structure
----
+
 ### Agents /
 *  Food /
 * * [Food.py](docs/Agents/Food/Food.md)
