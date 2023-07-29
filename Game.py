@@ -165,6 +165,24 @@ class Game:
         window_icon = pygame.image.load("image/evolution.png")
         pygame.display.set_icon(window_icon)
         pygame.display.set_caption("Evolution Simulator")
+    
+    def group_creatures_on_exit(self):
+        creature_groups = []
+        for c in self.creatures:
+            found_group = False
+            for g in creature_groups:
+                if type(c) == type[g[0]]:
+                    g.append(c)
+                    found_group = True
+            
+            if found_group == False:
+                creature_groups.append([c]) # Create a new creature group.
+        
+        return creature_groups
+
+    def on_quit(self):
+        creatures = self.group_creatures_on_exit()
+        print(creatures)
 
     def run_sim(self, foods_count):
         last_run = 0
@@ -172,6 +190,7 @@ class Game:
         while True:
             for event in pygame.event.get():
                 if event.type == QUIT:
+                    self.on_quit()
                     pygame.quit()
                     quit()
 
