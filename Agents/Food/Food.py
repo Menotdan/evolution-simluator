@@ -10,10 +10,6 @@ class Food:
     energy = 10
     alive = True
 
-    # constants
-    energy_min = 25
-    energy_max = 40
-
     def draw_object(self, display_surface, render_scale):
         pass
 
