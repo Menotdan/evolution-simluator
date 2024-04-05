@@ -16,14 +16,12 @@ RED =  (200, 0, 0)
 
 class Creature_Default(Creature):
     # constants
-    move_weights_change_scale = 0.075
-    speed_change_scale = 0.08
-    weight_change_scale = 1.25
-    eyesight_change_scale = 4
-    object_collision_box_edge = 1
-
+    move_weights_change_scale = 0.165
+    speed_change_scale = 0.135
+    weight_change_scale = 3.15
+    eyesight_change_scale = 8
     movement_energy_tuning = 0.5
-    eyesight_energy_tuning = 0.2
+    eyesight_energy_tuning = 0.1
     weight_power_factor = 25
 
     weight_min = 1
@@ -40,19 +38,19 @@ class Creature_Default(Creature):
     # evolution
     speed = 1 # coordinate movement per time unit
     weight = 15 # lets you store more energy (energy_max_by_weight_scale * weight) but costs more energy per tile movement ((weight / energy_max_by_weight_scale)*tiles)
-    eyesight = 75 # distance you can see, but costs more energy per time unit (eyesight / eyesight_energy_cost_scale) per time
+    eyesight = 100 # distance you can see, but costs more energy per time unit (eyesight / eyesight_energy_cost_scale) per time
 
     # movement weights (the max of these is the action performed)
     move_food_weight = 2.0   # ((eyesight - food_distance) * move_food_weight) * (food.energy / 10)
-    move_escape_weight = 3.0 # ((eyesight - escape_distance) * move_escape_weight) * ((escape.energy / self.energy))
-    move_attack_weight = 1.0 # ((eyesight - attack_distance) * move_attack_weight) * (self.energy / attack.energy)
+    move_escape_weight = 2.0 # ((eyesight - escape_distance) * move_escape_weight) * ((escape.energy / self.energy))
+    move_attack_weight = 2.0 # ((eyesight - attack_distance) * move_attack_weight) * (self.energy / attack.energy)
 
     def run_ai(self, creatures, food):
         if self.alive == False:
             return
 
-        if self.energy > self.weight * 28:
-            self.energy = self.weight * 28
+        if self.energy > self.weight * 30:
+            self.energy = self.weight * 30
 
         creatures_copy: list[Creature] = creatures[:]
         visible_creatures: list[Creature] = []
@@ -78,14 +76,16 @@ class Creature_Default(Creature):
         closest_escape: Creature = None
         closest_escape_distance = self.eyesight + 100 # arbitrary
 
-        closest_attack: Creature = None
-        closest_attack_distance = self.eyesight + 100 # arbitrary
+        highest_attack: Creature = None
+        highest_attack_energy = 0 # arbitrary
+        highest_attack_distance = -1
 
         for c, d in visible_creatures:
             if c.energy < self.energy:
-                if d < closest_attack_distance:
-                    closest_attack = c
-                    closest_attack_distance = d
+                if c.energy > highest_attack_energy:
+                    highest_attack = c
+                    highest_attack_energy = c.energy
+                    highest_attack_distance = d
             else:
                 if d < closest_escape_distance:
                     closest_escape = c
@@ -99,11 +99,14 @@ class Creature_Default(Creature):
         food_weight, escape_weight, attack_weight = (-1, -1, -1)
 
         if closest_food != None:
-            food_weight = ((self.eyesight - closest_food_distance) * self.move_food_weight) * (closest_food.energy / 10)
+            distance_factor = 1 - (closest_food_distance / self.eyesight)
+            food_weight = (distance_factor * self.move_food_weight) * (closest_food.energy / 10)
         if closest_escape != None:
-            escape_weight = ((self.eyesight - closest_escape_distance) * self.move_escape_weight) * (closest_escape.energy / max(0.1, self.energy)) / 3
-        if closest_attack != None:
-            attack_weight = ((self.eyesight - closest_attack_distance) * self.move_attack_weight) * (self.energy / max(0.1, closest_attack.energy)) / 3
+            distance_factor = 1 - (closest_escape_distance / self.eyesight)
+            escape_weight = (distance_factor * self.move_escape_weight) * (closest_escape.energy / 10)
+        if highest_attack != None:
+            distance_factor = 1 - (highest_attack_distance / self.eyesight)
+            attack_weight = (distance_factor * self.move_attack_weight) * (highest_attack_energy / 10)
 
         chosen_action = MOVE_WANDER
         if food_weight > escape_weight and food_weight > attack_weight:
@@ -119,7 +122,7 @@ class Creature_Default(Creature):
         elif chosen_action == MOVE_FOOD:
             move_direction = get_move_towards_vector(self, closest_food)
         elif chosen_action == MOVE_ATTACK:
-            move_direction = get_move_towards_vector(self, closest_attack)
+            move_direction = get_move_towards_vector(self, highest_attack)
         elif chosen_action == MOVE_ESCAPE:
             move_direction = get_move_away_vector(self, closest_escape)
             if move_direction[0] <= 0 and move_direction[1] <= 0:
@@ -136,7 +139,7 @@ class Creature_Default(Creature):
     def child_count(self):
         count = math.floor(max(0, min(1, self.energy / self.weight / 25)))
         if count != 0:
-            self.energy -= self.weight * 15
+            self.energy -= self.weight * 12
         return count
 
     def wander_behaviour(self):
@@ -154,10 +157,10 @@ class Creature_Default(Creature):
         self.alive = False
 
     def won_fight(self, fighter):
-        self.energy += fighter.energy / 1.3
+        self.energy += fighter.energy * 20
 
     def collides(self, object):
-        if get_distance(self, object) <= self.object_collision_box_edge:
+        if get_distance(self, object) / 2 <= self.object_collision_box_edge + object.object_collision_box_edge:
             return True
         return False
 
@@ -171,7 +174,7 @@ class Creature_Default(Creature):
         self.move_escape_weight = max(get_new_value(self.move_escape_weight, self.move_weights_change_scale), self.action_weight_min)
 
     def apply_move_energy_cost(self, distance):
-        self.energy -= ((self.weight / math.pow(7, self.weight_power_factor/self.weight)) * distance * self.movement_energy_tuning)
+        self.energy -= ((self.weight / math.pow(10, self.weight_power_factor/self.weight)) * distance * self.movement_energy_tuning)
 
     def copy(self):
         return_object = Creature_Default()
@@ -188,7 +191,10 @@ class Creature_Default(Creature):
         return return_object
 
     def draw_object(self, display_surface, render_scale):
-        pygame.draw.circle(display_surface, RED, (self.x * render_scale, self.y * render_scale), self.object_collision_box_edge * 4 * render_scale)
+        max_energy_drawing = 225
+        red = pygame.math.lerp(0, 255, pygame.math.clamp(self.energy / max_energy_drawing, 0, 1))
+        blue = pygame.math.lerp(255, 0, pygame.math.clamp(self.energy / max_energy_drawing, 0, 1))
+        pygame.draw.circle(display_surface, (red, 0, blue), (self.x * render_scale, self.y * render_scale), self.object_collision_box_edge * 4 * render_scale)
 
 
     ###
@@ -235,6 +241,7 @@ class Creature_Default(Creature):
         output = datapoints[:]
         for n in range(len(output)): # All are numbers.
             output[n] = output[n] / count
+            output[n] = round(output[n], 3)
 
         return output
 

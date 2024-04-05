@@ -9,6 +9,7 @@ class Food:
     y = 0
     energy = 10
     alive = True
+    object_collision_box_edge = 1
 
     def draw_object(self, display_surface, render_scale):
         pass

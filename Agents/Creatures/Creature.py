@@ -16,6 +16,9 @@ class Creature:
     energy = 50
     alive = True
 
+    # collisions
+    object_collision_box_edge = 1
+
     def run_ai(self, creatures, food):
         return
 

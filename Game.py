@@ -25,15 +25,17 @@ class Game:
     render_display = None
 
     # constants
-    food_energy_min = 25
-    food_energy_max = 40
+    food_energy_min = 10
+    food_energy_max = 15
 
     reproduction_factor = 3
 
-    sim_delay = 0.05
-    time_steps_day = 100
+    sim_delay = 0.01
+    time_steps_day = 200
     map_width = 500
     map_height = 350
+
+    max_creatures = 50
 
     render_scale = 2
 
@@ -63,7 +65,9 @@ class Game:
             clamped_distance = self.clamp_movement(c, self.map_width, self.map_height)
             c.apply_move_energy_cost(-clamped_distance) # Restore energy we don't actually use
 
-        for c in self.creatures:
+
+        top_creatures = {}
+        for idx,c in enumerate(self.creatures):
             if not c.alive:
                 continue
 
@@ -80,6 +84,26 @@ class Game:
                     continue
                 if c.collides(sub_c):
                     self.encounter_handle(c, sub_c)
+            
+            if len(self.creatures) > self.max_creatures and self.time_steps + 1 == self.time_steps_day:
+                if len(top_creatures) == self.max_creatures:
+                    idx_bigger = -1
+                    bigger_size = 99999999999999999
+                    for t in top_creatures:
+                        if c.energy > top_creatures[t]:
+                            if top_creatures[t] < bigger_size:
+                                idx_bigger = t
+                                bigger_size = top_creatures[idx_bigger]
+                    if idx_bigger != -1:
+                        del top_creatures[idx_bigger]
+                        top_creatures[idx] = c.energy
+                else:
+                    top_creatures[idx] = c.energy
+        
+        if len(top_creatures) > 0:
+            for idx, c in enumerate(self.creatures):
+                if idx not in top_creatures:
+                    c.alive = False
 
         # Cleanup dead creatures
         copy_creatures = self.creatures[:]
@@ -166,7 +190,7 @@ class Game:
         pygame.display.set_icon(window_icon)
         pygame.display.set_caption("Evolution Simulator")
     
-    def group_creatures_on_exit(self):
+    def get_creature_group(self):
         creature_groups = []
         for c in self.creatures:
             found_group = False
@@ -197,7 +221,7 @@ class Game:
         
 
     def on_quit(self):
-        creatures = self.group_creatures_on_exit()
+        creatures = self.get_creature_group()
         averages = self.get_creatures_avg(creatures)
         print(averages)
         
@@ -222,7 +246,6 @@ class Game:
 
             if self.time_steps == self.time_steps_day:
                 self.time_steps = 0
-                self.day_end(foods_count)
                 if len(self.creatures) > 0:
                     index = -1
                     highest_energy = 0
@@ -232,6 +255,11 @@ class Game:
                             highest_energy = self.creatures[c].energy
 
                     print(f"Creatures: {len(self.creatures)} | Best Creature; Move Weights (E, A, F): {round(self.creatures[index].move_escape_weight, 3)}, {round(self.creatures[index].move_attack_weight, 3)}, {round(self.creatures[index].move_food_weight, 3)}, Weight: {round(self.creatures[index].weight, 3)}, Speed: {round(self.creatures[index].speed, 3)}, Eyesight: {round(self.creatures[index].eyesight, 3)}")
+                creatures_group = self.get_creature_group()
+                averages = self.get_creatures_avg(creatures_group)
+                print(averages)
+
+                self.day_end(foods_count)
                 self.draw_objects()
             last_run = time.time() - start_run
 
